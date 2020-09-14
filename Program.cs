@@ -162,6 +162,8 @@ namespace AutoMapper.Collection.EFCore.Reproduce
                 var item = mapper.Map<ItemViewModel>(itemEntity);
 
                 store.Items.Add(item);
+                item.Stores.Add(store);
+                var storeEntity2 = mapper.Map<StoreEntity>(store);
                 await context.Stores.Persist(mapper).InsertOrUpdateAsync(store);
                 await context.SaveChangesAsync();
             }
