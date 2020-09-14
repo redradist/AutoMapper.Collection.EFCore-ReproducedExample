@@ -3,8 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper.Collection.EFCore.Reproduce.Entities;
 using AutoMapper.Collection.EFCore.Reproduce.ViewModels;
-using AutoMapper.EntityFrameworkCore;
-using AutoMapper.EquivalencyExpression;
+// using AutoMapper.EntityFrameworkCore;
+// using AutoMapper.EquivalencyExpression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
@@ -27,9 +27,9 @@ namespace AutoMapper.Collection.EFCore.Reproduce
             var program = new Program();
             var configuration = new MapperConfiguration(cfg =>
             {
-                cfg.AddCollectionMappers();
+                // cfg.AddCollectionMappers();
                 cfg.CreateMap<StoreViewModel, StoreEntity>()
-                    .EqualityComparison((odto, o) => odto.Id == o.Id)
+                    // .EqualityComparison((odto, o) => odto.Id == o.Id)
                     .ForMember(d => d.Items,
                         opt => opt.MapFrom(s => s.Items))
                     .AfterMap((model, entity) =>
@@ -42,7 +42,7 @@ namespace AutoMapper.Collection.EFCore.Reproduce
                         }
                     });
                 cfg.CreateMap<StoreEntity, StoreViewModel>()
-                    .EqualityComparison((odto, o) => odto.Id == o.Id)
+                    // .EqualityComparison((odto, o) => odto.Id == o.Id)
                     .ForMember(d => d.Items,
                         opt => opt.MapFrom(s => s.Items.Select(y => y.Item).ToList()))
                     .AfterMap((_, place) =>
@@ -67,7 +67,7 @@ namespace AutoMapper.Collection.EFCore.Reproduce
                     });
                 
                 cfg.CreateMap<ItemViewModel, ItemEntity>()
-                    .EqualityComparison((odto, o) => odto.Id == o.Id)
+                    // .EqualityComparison((odto, o) => odto.Id == o.Id)
                     .ForMember(d => d.Stores,
                         opt => opt.MapFrom(s => s.Stores))
                     .AfterMap((model, entity) =>
@@ -80,7 +80,7 @@ namespace AutoMapper.Collection.EFCore.Reproduce
                         }
                     });
                 cfg.CreateMap<ItemEntity, ItemViewModel>()
-                    .EqualityComparison((odto, o) => odto.Id == o.Id)
+                    // .EqualityComparison((odto, o) => odto.Id == o.Id)
                     .ForMember(d => d.Stores,
                         opt => opt.MapFrom(s => s.Stores.Select(y => y.Store).ToList()))
                     .AfterMap((_, place) =>
@@ -105,13 +105,13 @@ namespace AutoMapper.Collection.EFCore.Reproduce
                     });
                 
                 cfg.CreateMap<StoreViewModel, StoreItemEntity>()
-                    .EqualityComparison((odto, o) => odto.Id == o.StoreId && odto.Items.Any(model => model.Id == o.ItemId))
+                    // .EqualityComparison((odto, o) => odto.Id == o.StoreId && odto.Items.Any(model => model.Id == o.ItemId))
                     .ForMember(entity => entity.StoreId, opt => opt.MapFrom(model => model.Id))
                     .ForMember(entity => entity.Store, opt => opt.MapFrom(model => model))
                     .ForMember(entity => entity.ItemId, opt => opt.Ignore())
                     .ForMember(entity => entity.Item, opt => opt.Ignore());
                 cfg.CreateMap<StoreItemEntity, StoreViewModel>() // < -- Issue
-                    .EqualityComparison((odto, o) => odto.StoreId == o.Id && o.Items.Any(model => model.Id == odto.ItemId))
+                    // .EqualityComparison((odto, o) => odto.StoreId == o.Id && o.Items.Any(model => model.Id == odto.ItemId))
                     .ForMember(x => x.Id, opt => opt.MapFrom(src => src.Store.Id))
                     .ForMember(x => x.Name, opt => opt.MapFrom(src => src.Store.Name))
                     .ForMember(x => x.Items, opt => opt.MapFrom(src => new List<ItemEntity>()
@@ -120,13 +120,13 @@ namespace AutoMapper.Collection.EFCore.Reproduce
                     }));
                 
                 cfg.CreateMap<ItemViewModel, StoreItemEntity>()
-                    .EqualityComparison((odto, o) => odto.Id == o.ItemId && odto.Stores.Any(model => model.Id == o.StoreId))
+                    // .EqualityComparison((odto, o) => odto.Id == o.ItemId && odto.Stores.Any(model => model.Id == o.StoreId))
                     .ForMember(entity => entity.StoreId, opt => opt.Ignore())
                     .ForMember(entity => entity.Store, opt => opt.Ignore())
                     .ForMember(entity => entity.ItemId, opt => opt.MapFrom(model => model.Id))
                     .ForMember(entity => entity.Item, opt => opt.MapFrom(model => model));
                 cfg.CreateMap<StoreItemEntity, ItemViewModel>() // < -- Issue
-                    .EqualityComparison((odto, o) => odto.ItemId == o.Id && o.Stores.Any(model => model.Id == odto.StoreId))
+                    // .EqualityComparison((odto, o) => odto.ItemId == o.Id && o.Stores.Any(model => model.Id == odto.StoreId))
                     .ForMember(x => x.Id, opt => opt.MapFrom(src => src.Item.Id))
                     .ForMember(x => x.Name, opt => opt.MapFrom(src => src.Item.Name))
                     .ForMember(x => x.Stores, opt => opt.MapFrom(src => new List<StoreEntity>()
@@ -164,7 +164,7 @@ namespace AutoMapper.Collection.EFCore.Reproduce
                 store.Items.Add(item);
                 item.Stores.Add(store);
                 var storeEntity2 = mapper.Map<StoreEntity>(store);
-                await context.Stores.Persist(mapper).InsertOrUpdateAsync(store);
+                // await context.Stores.Persist(mapper).InsertOrUpdateAsync(store);
                 await context.SaveChangesAsync();
             }
         }
